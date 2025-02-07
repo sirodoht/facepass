@@ -1,6 +1,8 @@
-# FacePass
+# facepass
 
-Works with Python 3.10 only.
+Recognise your face among others.
+
+![screenshot](screenshot.jpeg)
 
 ## Prerequisites
 
