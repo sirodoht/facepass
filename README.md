@@ -40,3 +40,39 @@ This should open a window that shows the webcam live feed and prints whether a p
 has been recognised.
 
 Quit with hitting 'q' on the keyboard.
+
+4. Run server:
+
+```sh
+fastapi run server.py
+```
+
+## Dependencies
+
+[pip-tools](https://github.com/jazzband/pip-tools) is used for depedency management.
+
+To add a new dependency:
+
+1. Install pip-tools:
+
+  ```sh
+  pip install pip-tools
+  ```
+
+2. Add new package on `requirements.in`:
+
+  ```sh
+  echo new-package >> requirements.in
+  ```
+
+3. Re-compile requirements:
+
+  ```sh
+  pip-compile requirements.in --no-strip-extras
+  ```
+
+4. Install new package:
+
+  ```sh
+  pip install -r requirements.txt
+  ```
