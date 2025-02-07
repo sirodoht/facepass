@@ -30,7 +30,7 @@ data/mary.jpeg
 data/tom.jpeg
 ```
 
-3. Run:
+3. Run in terminal:
 
 ```sh
 python main.py
@@ -41,7 +41,7 @@ has been recognised.
 
 Quit with hitting 'q' on the keyboard.
 
-4. Run server:
+4. Or run as a web app:
 
 ```sh
 fastapi run server.py

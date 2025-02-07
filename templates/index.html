@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <title>facepass</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>facepass</h1>
+        <div id="errors" style="color: red;"></div>
+        <div id="webcam"></div>
+        <div id="log"></div>
+        <div id="result"></div>
+
+        <script>
+            const video = document.createElement('video');
+            video.autoplay = true;
+            document.getElementById("webcam").appendChild(video);
+
+            // Get access to the webcam
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error('Error accessing webcam:', err);
+                    const textNode = document.createTextNode(err);
+                    document.getElementById("errors").appendChild(textNode);
+                });
+
+            // Send the captured frame to the server
+            function sendFrame(dataURL) {
+                fetch('/process', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({image_base64: dataURL})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Response:', JSON.stringify(data));
+                        if (data.recognized.length > 0) {
+                            document.getElementById("result").textContent = 'ID success: ' + data.recognized.join(', ');
+                        } else {
+                            document.getElementById("result").textContent = 'No ID.';
+                        }
+                    })
+                    .catch(err => console.error('Error processing frame:', err));
+            }
+
+            // Capture a frame and convert into data URL
+            function captureFrame() {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Convert to data URL (Base64) or Blob if needed
+                const imageDataURL = canvas.toDataURL('image/jpeg');
+                const now = new Date();
+                document.getElementById("log").textContent = "Last capture: " + now.toString();
+
+                // Send frame to the backend
+                sendFrame(imageDataURL);
+
+                return imageDataURL;
+            }
+
+            // Capture a frame at an interval of seconds
+            setInterval(captureFrame, 2_000);
+        </script>
+    </body>
+</html>
