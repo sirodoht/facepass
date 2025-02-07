@@ -44,7 +44,7 @@ Quit with hitting 'q' on the keyboard.
 4. Or run as a web app:
 
 ```sh
-fastapi run server.py
+fastapi run server.py --host 127.0.0.1 --reload
 ```
 
 ## Dependencies
