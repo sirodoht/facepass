@@ -7,6 +7,9 @@ import numpy as np
 # Load faces and extract encodings
 known_face_encodings = {}
 for file in Path("./data").iterdir():
+    if file.name == ".DS_Store" or file.is_dir():
+        continue
+
     print(f"Loading {file}")
     person_name = file.name.split(".")[0].capitalize()
     image = face_recognition.load_image_file(file)
